@@ -814,17 +814,18 @@ class TestFileLibTiff(LibTiffTestCase):
             assert_image_equal_tofile(im, "Tests/images/tiff_16bit_RGB_target.png")
 
     def test_tiled_planar_16bit_RGBa(self):
-        # gdal_translate -co TILED=yes -co INTERLEAVE=BAND -co COMPRESS=LZW -co ALPHA=PREMULTIPLIED \
+        # gdal_translate -co TILED=yes \
+        # -co INTERLEAVE=BAND -co COMPRESS=LZW -co ALPHA=PREMULTIPLIED \
         # tiff_16bit_RGBa.tiff tiff_tiled_planar_16bit_RGBa.tiff
         with Image.open("Tests/images/tiff_tiled_planar_16bit_RGBa.tiff") as im:
             assert_image_equal_tofile(im, "Tests/images/tiff_16bit_RGBa_target.png")
 
     def test_strip_planar_16bit_RGBa(self):
-        # gdal_translate -co TILED=no -co INTERLEAVE=BAND -co COMPRESS=LZW -co ALPHA=PREMULTIPLIED \
+        # gdal_translate -co TILED=no \
+        # -co INTERLEAVE=BAND -co COMPRESS=LZW -co ALPHA=PREMULTIPLIED \
         # tiff_16bit_RGBa.tiff tiff_strip_planar_16bit_RGBa.tiff
         with Image.open("Tests/images/tiff_strip_planar_16bit_RGBa.tiff") as im:
             assert_image_equal_tofile(im, "Tests/images/tiff_16bit_RGBa_target.png")
-
 
     def test_old_style_jpeg(self):
         infile = "Tests/images/old-style-jpeg-compression.tif"
