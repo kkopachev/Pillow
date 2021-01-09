@@ -239,10 +239,10 @@ OPEN_INFO = {
     (II, 5, (1,), 1, (8, 8, 8, 8, 8, 8), (0, 0)): ("CMYK", "CMYKXX"),
     (MM, 5, (1,), 1, (8, 8, 8, 8, 8, 8), (0, 0)): ("CMYK", "CMYKXX"),
     (II, 5, (1,), 1, (16, 16, 16, 16), ()): ("CMYK", "CMYK;16L"),
-    # JPEG compressed images handled by LibTiff and auto-converted to RGBX
+    # JPEG compressed images handled by LibTiff and auto-converted to RGB
     # Minimal Baseline TIFF requires YCbCr images to have 3 SamplesPerPixel
-    (II, 6, (1,), 1, (8, 8, 8), ()): ("RGB", "RGBX"),
-    (MM, 6, (1,), 1, (8, 8, 8), ()): ("RGB", "RGBX"),
+    (II, 6, (1,), 1, (8, 8, 8), ()): ("RGB", "RGB"),
+    (MM, 6, (1,), 1, (8, 8, 8), ()): ("RGB", "RGB"),
     (II, 8, (1,), 1, (8, 8, 8), ()): ("LAB", "LAB"),
     (MM, 8, (1,), 1, (8, 8, 8), ()): ("LAB", "LAB"),
 }
@@ -1323,6 +1323,10 @@ class TiffImageFile(ImageFile.ImageFile):
                 rawmode = rawmode.replace(";16B", ";16N")
             if ";16L" in rawmode:
                 rawmode = rawmode.replace(";16L", ";16N")
+
+            # old style jpeg compression images read by libtiff as RGBX
+            if self._compression == "tiff_jpeg":
+                rawmode = "RGBX"
 
             # Offset in the tile tuple is 0, we go from 0,0 to
             # w,h, and we only do this once -- eds
