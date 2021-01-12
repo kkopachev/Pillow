@@ -419,7 +419,6 @@ ImagingLibTiffDecode(
     TIFF *tiff;
     uint16 photometric = 0;  // init to not PHOTOMETRIC_YCBCR
     uint16 compression;
-    int isYCbCr = 0;
 
     /* buffer is the encoded file, bytes is the length of the encoded file */
     /*     it all ends up in state->buffer, which is a uint8* from Imaging.h */
@@ -517,15 +516,13 @@ ImagingLibTiffDecode(
     TIFFGetField(tiff, TIFFTAG_PHOTOMETRIC, &photometric);
     TIFFGetField(tiff, TIFFTAG_COMPRESSION, &compression);
 
-    isYCbCr = photometric == PHOTOMETRIC_YCBCR;
-
-    if (compression == COMPRESSION_JPEG && isYCbCr) {
+    if (compression == COMPRESSION_JPEG && photometric == PHOTOMETRIC_YCBCR) {
         // If using new JPEG compression, let libjpeg do RGB convertion
         TIFFSetField(tiff, TIFFTAG_JPEGCOLORMODE, JPEGCOLORMODE_RGB);
-        isYCbCr = 0;
+        photometric = PHOTOMETRIC_RGB;
     }
 
-    if (isYCbCr) {
+    if (photometric == PHOTOMETRIC_YCBCR) {
         _decodeYCbCr(im, state, tiff);
     }
     else {
