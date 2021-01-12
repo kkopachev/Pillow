@@ -16,7 +16,6 @@ from .helper import (
     assert_image_similar,
     assert_image_similar_tofile,
     hopper,
-    is_big_endian,
     skip_unless_feature,
 )
 
@@ -839,7 +838,6 @@ class TestFileLibTiff(LibTiffTestCase):
         with Image.open(infile) as im:
             assert_image_similar_tofile(im, "Tests/images/flower.jpg", 0.5)
 
-    @pytest.mark.xfail(is_big_endian(), reason="Fails on big-endian")
     def test_old_style_jpeg(self):
         infile = "Tests/images/old-style-jpeg-compression.tif"
         with Image.open(infile) as im:
