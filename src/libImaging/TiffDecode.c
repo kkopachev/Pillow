@@ -299,6 +299,10 @@ _decodeYCbCr(Imaging im, ImagingCodecState state, TIFF *tiff) {
             goto decodeycbcr_err;
         }
 
+#if WORDS_BIGENDIAN
+        TIFFSwabArrayOfLong((UINT32 *)state->buffer, img.width * rows_to_read);
+#endif
+
         TRACE(("Decoded RGBA block for row %d \n", state->y));
 
         // iterate over each row in the strip and stuff data into image
